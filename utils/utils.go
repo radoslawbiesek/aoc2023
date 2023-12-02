@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -20,4 +22,14 @@ func GetLines(path, separator string) (lines []string) {
 	lines = strings.Split(content, separator)
 
 	return
+}
+
+func ParseInt(str string) int {
+	parsed, err := strconv.Atoi(strings.TrimSpace(str))
+
+	if err != nil {
+		panic(fmt.Sprintf("Could not parse %s", str))
+	}
+
+	return parsed
 }
