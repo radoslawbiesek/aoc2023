@@ -66,11 +66,6 @@ func part1(path string) (lowest int) {
 	return
 }
 
-type seedEntry struct {
-	start    int
-	rangeLen int
-}
-
 func part2(path string) (lowest int) {
 	seeds, maps := parseInput(path)
 
