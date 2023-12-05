@@ -33,3 +33,9 @@ func ParseInt(str string) int {
 
 	return parsed
 }
+
+func IsInt(str string) bool {
+	_, err := strconv.Atoi(strings.TrimSpace(str))
+
+	return err == nil
+}
