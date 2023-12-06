@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"strings"
 
 	"github.com/radoslawbiesek/aoc2023/utils"
@@ -46,6 +47,7 @@ func parseInput(path string) (seeds []int, maps [][]sourceDestinationEntry) {
 
 func part1(path string) (lowest int) {
 	seeds, maps := parseInput(path)
+	lowest = math.MaxInt
 
 	for _, seed := range seeds {
 		curr := seed
@@ -58,7 +60,7 @@ func part1(path string) (lowest int) {
 			}
 		}
 
-		if lowest == 0 || curr < lowest {
+		if curr < lowest {
 			lowest = curr
 		}
 	}
@@ -68,6 +70,7 @@ func part1(path string) (lowest int) {
 
 func part2(path string) (lowest int) {
 	seeds, maps := parseInput(path)
+	lowest = math.MaxInt
 
 	for i := 0; i < len(seeds); i += 2 {
 		start := seeds[i]
@@ -84,7 +87,7 @@ func part2(path string) (lowest int) {
 				}
 			}
 
-			if lowest == 0 || curr < lowest {
+			if curr < lowest {
 				lowest = curr
 			}
 		}
