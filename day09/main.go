@@ -11,7 +11,7 @@ import (
 func getInput(path string) (sequences [][]int) {
 	lines := utils.GetLines(path, "\n")
 	for _, line := range lines {
-		sequence := utils.Map(strings.Split(line, " "), utils.ParseInt)
+		sequence := utils.Map(strings.Fields(line), utils.ParseInt)
 		sequences = append(sequences, sequence)
 	}
 

@@ -19,7 +19,7 @@ func parseInput(path string) (seeds []int, maps [][]sourceDestinationEntry) {
 
 	seedsStr := lines[0]
 	seedsStr = strings.TrimSpace(strings.Split(seedsStr, ":")[1])
-	for _, seedStr := range strings.Split(seedsStr, " ") {
+	for _, seedStr := range strings.Fields(seedsStr) {
 		seeds = append(seeds, utils.ParseInt(seedStr))
 	}
 
@@ -33,7 +33,7 @@ func parseInput(path string) (seeds []int, maps [][]sourceDestinationEntry) {
 			continue
 		}
 
-		numStrs := strings.Split(lineStr, " ")
+		numStrs := strings.Fields(lineStr)
 		entry := sourceDestinationEntry{
 			destination: utils.ParseInt(numStrs[0]),
 			source:      utils.ParseInt(numStrs[1]),

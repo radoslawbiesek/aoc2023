@@ -27,7 +27,7 @@ func parseLine(line string) (cubes Cubes) {
 		cubeStrs := strings.Split(roundStr, ",")
 		for _, cubeStr := range cubeStrs {
 			cubeStr = strings.TrimSpace(cubeStr)
-			splitted := strings.Split(cubeStr, " ")
+			splitted := strings.Fields(cubeStr)
 			num := utils.ParseInt(splitted[0])
 			color := splitted[1]
 

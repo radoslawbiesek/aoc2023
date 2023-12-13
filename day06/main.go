@@ -10,8 +10,7 @@ import (
 func getInput(path string) (times, distances []int) {
 	lines := utils.GetLines(path, "\n")
 	timeStr := lines[0]
-	timeStrSplitted := strings.Split(timeStr, " ")[1:]
-	for _, numStr := range timeStrSplitted {
+	for _, numStr := range strings.Fields(timeStr)[1:] {
 		if numStr == "" {
 			continue
 		}
@@ -19,8 +18,7 @@ func getInput(path string) (times, distances []int) {
 	}
 
 	dostanceStr := lines[1]
-	dostanceStrSplitted := strings.Split(dostanceStr, " ")[1:]
-	for _, numStr := range dostanceStrSplitted {
+	for _, numStr := range strings.Fields(dostanceStr)[1:] {
 		if numStr == "" {
 			continue
 		}

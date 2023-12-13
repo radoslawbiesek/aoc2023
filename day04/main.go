@@ -12,14 +12,14 @@ func parseLine(lineStr string) (cardIndex int, winningNumbers map[int]bool, myNu
 
 	splitted := strings.Split(lineStr, ":")
 
-	indexSplitted := strings.Split(splitted[0], " ")
+	indexSplitted := strings.Fields(splitted[0])
 	cardIndex = utils.ParseInt(indexSplitted[len(indexSplitted)-1])
 
 	numbersStr := strings.TrimSpace(splitted[1])
 	numbersStrSplitted := strings.Split(numbersStr, "|")
 
 	winningNumbersStr := strings.TrimSpace(numbersStrSplitted[0])
-	for _, winningNumberStr := range strings.Split(winningNumbersStr, " ") {
+	for _, winningNumberStr := range strings.Fields(winningNumbersStr) {
 		if winningNumberStr == "" {
 			continue
 		}
@@ -28,7 +28,7 @@ func parseLine(lineStr string) (cardIndex int, winningNumbers map[int]bool, myNu
 	}
 
 	myNumbersStr := strings.TrimSpace(numbersStrSplitted[1])
-	for _, myNumberStr := range strings.Split(myNumbersStr, " ") {
+	for _, myNumberStr := range strings.Fields(myNumbersStr) {
 		if myNumberStr == "" {
 			continue
 		}

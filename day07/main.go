@@ -87,7 +87,7 @@ type hand struct {
 }
 
 func parseLine(line string, jokerRule bool) *hand {
-	splitted := strings.Split(line, " ")
+	splitted := strings.Fields(line)
 
 	cards := strings.Split(splitted[0], "")
 	cardScores := utils.Map(cards, func(card string) int {
