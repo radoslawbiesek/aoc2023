@@ -85,16 +85,28 @@ func (g Grid[T]) Get8Neighbors(curr Point) []Point {
 	return g.getNeighbors(curr, Directions8)
 }
 
-func NewStrGrid(str string) *Grid[string] {
-	grid := Grid[string]{}
+func NewGrid[T any](str string, mapFn func(el string) T) *Grid[T] {
+	grid := Grid[T]{}
 	lines := strings.Split(str, "\n")
 	for _, lineStr := range lines {
-		line := []string{}
+		line := []T{}
 		for _, char := range strings.Split(lineStr, "") {
-			line = append(line, char)
+			line = append(line, mapFn(char))
 		}
 		grid = append(grid, line)
 	}
 
 	return &grid
+}
+
+func NewStrGrid(str string) *Grid[string] {
+	return NewGrid[string](str, func(el string) string {
+		return el
+	})
+}
+
+func NewIntGrid(str string) *Grid[int] {
+	return NewGrid[int](str, func(el string) int {
+		return ParseInt(el)
+	})
 }
