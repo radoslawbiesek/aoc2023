@@ -27,7 +27,7 @@ var DIRECTION_SE = Direction{Y: 1, X: 1}
 
 var Directions8 = []Direction{DIRECTION_DOWN, DIRECTION_LEFT, DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_NE, DIRECTION_NW, DIRECTION_SE, DIRECTION_SW}
 
-type Grid[T any] [][]T
+type Grid[T comparable] [][]T
 
 func (g *Grid[T]) String() (str string) {
 	for _, row := range *g {
@@ -65,7 +65,18 @@ func (g *Grid[T]) SetValue(p Point, value T) {
 	(*g)[p.Y][p.X] = value
 }
 
-func (g Grid[T]) getNeighbors(curr Point, directions []Direction) (points []Point) {
+func (g *Grid[T]) FindValue(value T) *Point {
+	for y, row := range *g {
+		for x, v := range row {
+			if v == value {
+				return &Point{X: x, Y: y}
+			}
+		}
+	}
+	return nil
+}
+
+func (g Grid[T]) GetNeighbors(curr Point, directions []Direction) (points []Point) {
 	width, height := g.GetDimensions()
 	for _, dir := range directions {
 		next := Point{X: curr.X + dir.X, Y: curr.Y + dir.Y}
@@ -78,14 +89,14 @@ func (g Grid[T]) getNeighbors(curr Point, directions []Direction) (points []Poin
 }
 
 func (g Grid[T]) Get4Neighbors(curr Point) []Point {
-	return g.getNeighbors(curr, Directions4)
+	return g.GetNeighbors(curr, Directions4)
 }
 
 func (g Grid[T]) Get8Neighbors(curr Point) []Point {
-	return g.getNeighbors(curr, Directions8)
+	return g.GetNeighbors(curr, Directions8)
 }
 
-func NewGrid[T any](str string, mapFn func(el string) T) *Grid[T] {
+func NewGrid[T comparable](str string, mapFn func(el string) T) *Grid[T] {
 	grid := Grid[T]{}
 	lines := strings.Split(str, "\n")
 	for _, lineStr := range lines {
