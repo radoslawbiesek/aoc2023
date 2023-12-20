@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/radoslawbiesek/aoc2023/utils"
@@ -115,29 +116,57 @@ func part1(path string) (total int) {
 	return
 }
 
-func checkPart2(rules []rule, workflows *workflows, acceptedRules *[][]rule, currentWorkflowName string) {
+type intervals [4][2]int
+
+func applyRule(i intervals, name, condition string, value int, opposite bool) intervals {
+	NAMES := []string{"x", "m", "a", "s"}
+	idx := slices.Index(NAMES, name)
+	if opposite && condition == LT {
+		i[idx][0] = value
+	} else if opposite && condition == GT {
+		i[idx][1] = value
+	} else if !opposite && condition == LT {
+		i[idx][1] = value - 1
+	} else if !opposite && condition == GT {
+		i[idx][0] = value + 1
+	}
+	return i
+}
+
+func checkPart2(allIntervals *[]intervals, workflows *workflows, currentIntervals intervals, currentWorkflowName string) {
 	if currentWorkflowName == REJECTED {
 		return
 	}
 	if currentWorkflowName == ACCEPTED {
-		(*acceptedRules) = append((*acceptedRules), rules)
+		(*allIntervals) = append((*allIntervals), currentIntervals)
 		return
 	}
 	currWorkflow := (*workflows)[currentWorkflowName]
-	for _, rule := range currWorkflow.rules {
-		if rule.condition == "" {
-			checkPart2(rules, workflows, acceptedRules, rule.next)
-		} else {
-			checkPart2(append(rules, rule), workflows, acceptedRules, rule.next)
+	for _, r := range currWorkflow.rules {
+		if r.condition == "" {
+			checkPart2(allIntervals, workflows, currentIntervals, r.next)
+			return
 		}
+		acceptedRuleIntervals := applyRule(currentIntervals, r.parameterName, r.condition, r.value, false)
+		notAcceptedRuleIntervals := applyRule(currentIntervals, r.parameterName, r.condition, r.value, true)
+		checkPart2(allIntervals, workflows, acceptedRuleIntervals, r.next)
+		currentIntervals = notAcceptedRuleIntervals
 	}
 	return
 }
 
 func part2(path string) (total int) {
 	workflows, _ := getInput(path)
-	acceptedRules := [][]rule{}
-	checkPart2([]rule{}, &workflows, &acceptedRules, WORKFLOW_START)
+	allIntervals := []intervals{}
+	initialIntervals := intervals{{1, 4000}, {1, 4000}, {1, 4000}, {1, 4000}}
+	checkPart2(&allIntervals, &workflows, initialIntervals, WORKFLOW_START)
+	for _, intervals := range allIntervals {
+		combinations := 1
+		for _, interval := range intervals {
+			combinations *= interval[1] - interval[0] + 1
+		}
+		total += combinations
+	}
 	return
 }
 
