@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/radoslawbiesek/aoc2023/utils"
@@ -10,12 +9,6 @@ import (
 
 func isEmpty(char string) bool {
 	return char == "."
-}
-
-func isInt(char string) bool {
-	_, err := strconv.Atoi(char)
-
-	return err == nil
 }
 
 func isGear(char string) bool {
@@ -27,7 +20,7 @@ func isAdjacentToSymbol(grid utils.Grid[string], lineIdx, idxStart, idxEnd int) 
 		currPoint := utils.Point{X: i, Y: lineIdx}
 		for _, neighbor := range grid.Get8Neighbors(currPoint) {
 			value := grid.GetValue(neighbor)
-			if !isEmpty(value) && !isInt(value) {
+			if !isEmpty(value) && !utils.IsInt(value) {
 				return true
 			}
 		}
@@ -64,14 +57,14 @@ func part1(path string) (total int) {
 		idxEnd := -1
 
 		for charIdx, char := range line {
-			if isInt(char) {
+			if utils.IsInt(char) {
 				if idxStart == -1 {
 					idxStart = charIdx
 				}
 				idxEnd = charIdx
 			}
 
-			if idxStart != -1 && (!isInt(char) || charIdx == len(line)-1) {
+			if idxStart != -1 && (!utils.IsInt(char) || charIdx == len(line)-1) {
 				if isAdjacentToSymbol(grid, lineIdx, idxStart, idxEnd) {
 					num := getNumber(line, idxStart, idxEnd)
 					total += num
@@ -94,14 +87,14 @@ func part2(path string) (total int) {
 		idxStart := -1
 		idxEnd := -1
 		for charIdx, char := range line {
-			if isInt(char) {
+			if utils.IsInt(char) {
 				if idxStart == -1 {
 					idxStart = charIdx
 				}
 				idxEnd = charIdx
 			}
 
-			if idxStart != -1 && (!isInt(char) || charIdx == len(line)-1) {
+			if idxStart != -1 && (!utils.IsInt(char) || charIdx == len(line)-1) {
 				gearPoint := findAdjacentGearSymbol(grid, lineIdx, idxStart, idxEnd)
 				if gearPoint != nil {
 					num := getNumber(line, idxStart, idxEnd)
